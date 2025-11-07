@@ -15,12 +15,10 @@ RUN apt-get update && apt-get install -y \
     && echo $TZ > /etc/timezone 
 	
 # This command is updated for modern Ubuntu/Debian distributions
-RUN apt-get update \
-    && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     ca-certificates \
     fonts-liberation \
-    libasound2t64 \
-    #   ^--- THIS IS THE FIX ---^
+    libasound2 \
     libatk-bridge2.0-0 \
     libatk1.0-0 \
     libcairo2 \
@@ -28,7 +26,7 @@ RUN apt-get update \
     libdbus-1-3 \
     libexpat1 \
     libfontconfig1 \
-    libgbm1 \
+    libgbm1 \  # <--- THIS IS THE KEY FIX
     libgcc1 \
     libgdk-pixbuf2.0-0 \
     libglib2.0-0 \
@@ -54,8 +52,7 @@ RUN apt-get update \
     lsb-release \
     wget \
     xdg-utils \
-    --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+    --no-install-recommends
 
 # 下载并安装 AionUi
 RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.5.0/AionUi-1.5.0-linux-amd64.deb -O /tmp/aionui.deb \
