@@ -5,6 +5,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai
 
 # 安装基础依赖和常用开发工具
+RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel
+
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
@@ -29,7 +31,7 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     flask \
     redis \
     pillow \
-    beautifulsoup4 webdavclient3 requests
+    beautifulsoup4 webdavclient3
 	
 # This command is updated for modern Ubuntu/Debian distributions
 RUN apt-get update \
