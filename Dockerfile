@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:25.04
 
 # 设置环境变量避免交互式提示
 ENV DEBIAN_FRONTEND=noninteractive
@@ -15,10 +15,12 @@ RUN apt-get update && apt-get install -y \
     && echo $TZ > /etc/timezone 
 	
 # This command is updated for modern Ubuntu/Debian distributions
-RUN apt-get update && apt-get install -y \
+RUN apt-get update \
+    && apt-get install -y \
     ca-certificates \
     fonts-liberation \
-    libasound2 \
+    libasound2t64 \
+    #   ^--- THIS IS THE FIX ---^
     libatk-bridge2.0-0 \
     libatk1.0-0 \
     libcairo2 \
@@ -26,7 +28,7 @@ RUN apt-get update && apt-get install -y \
     libdbus-1-3 \
     libexpat1 \
     libfontconfig1 \
-    libgbm1 \  # <--- THIS IS THE KEY FIX
+    libgbm1 \
     libgcc1 \
     libgdk-pixbuf2.0-0 \
     libglib2.0-0 \
@@ -52,10 +54,11 @@ RUN apt-get update && apt-get install -y \
     lsb-release \
     wget \
     xdg-utils \
-    --no-install-recommends
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
 
 # 下载并安装 AionUi
-RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.5.0/AionUi-1.5.0-linux-amd64.deb -O /tmp/aionui.deb \
+RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.4.2/AionUi-1.4.2-linux-amd64.deb -O /tmp/aionui.deb \
     && apt-get update \
     && apt-get install -y /tmp/aionui.deb \
     && rm /tmp/aionui.deb \
