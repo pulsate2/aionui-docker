@@ -100,6 +100,13 @@ RUN wget https://github.com/coder/code-server/releases/download/v4.105.1/code-se
     && rm /tmp/code-server.deb \
     && rm -rf /var/lib/apt/lists/*
 
+# 下载并安装 cloudflared
+RUN wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -O /tmp/cloudflared.deb \
+    && apt-get update \
+    && apt-get install -y /tmp/cloudflared.deb \
+    && rm /tmp/cloudflared.deb \
+    && rm -rf /var/lib/apt/lists/*
+
 # 复制 nginx 配置
 COPY nginx.conf /etc/nginx/nginx.conf
 
