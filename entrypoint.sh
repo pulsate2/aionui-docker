@@ -8,10 +8,13 @@ mkdir -p /var/log/supervisor
 echo "Starting services with supervisor..."
 /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf &
 
+# 等待 supervisor 完全启动
+echo "Waiting for supervisor to initialize..."
+sleep 5
+
 # 根据环境变量按需启动 code-server
 if [ -n "$ENABLE_CODESERVER" ]; then
     echo "ENABLE_CODESERVER is set, starting code-server..."
-    sleep 3
     supervisorctl start code-server
 else
     echo "ENABLE_CODESERVER not set, code-server will not start"
@@ -20,7 +23,6 @@ fi
 # 根据环境变量按需启动 cloudflared
 if [ -n "$CF_TOKEN" ]; then
     echo "CF_TOKEN is set, starting cloudflared..."
-    sleep 3
     supervisorctl start cloudflared
 else
     echo "CF_TOKEN not set, cloudflared will not start"
@@ -28,7 +30,7 @@ fi
 
 # 等待 AionUi 启动并截获密码
 echo "Waiting for AionUi to start..."
-sleep 10
+sleep 5
 
 # 尝试从日志中提取初始密码
 if [ -f /var/log/supervisor/aionui.out.log ]; then
