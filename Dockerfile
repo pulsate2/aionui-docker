@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
-RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel --break-system-packages
 
 
 # 安装常用 Python 包
