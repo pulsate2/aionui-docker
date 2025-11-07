@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+./sync_data.sh &
+if [ "$DOWNLOAD_BACKUP" = "true" ]; then
+	sleep 15
+fi
+
 # 创建日志目录
 mkdir -p /var/log/supervisor
 

@@ -29,7 +29,7 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     flask \
     redis \
     pillow \
-    beautifulsoup4
+    beautifulsoup4 webdavclient3 requests
 	
 # This command is updated for modern Ubuntu/Debian distributions
 RUN apt-get update \
