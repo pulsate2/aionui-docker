@@ -31,7 +31,7 @@ options = {
     'webdav_password': '$WEBDAV_PASSWORD'
 }
 client = Client(options)
-backups = [file for file in client.list() if file.endswith('.tar.gz') and file.startswith('vaultwarden_backup_')]
+backups = [file for file in client.list() if file.endswith('.tar.gz') and file.startswith('aionui_backup_')]
 if not backups:
     print('没有找到备份文件')
     sys.exit()
@@ -68,7 +68,7 @@ sync_data() {
 
         if [ -d "/data" ]; then
             timestamp=$(date +%Y%m%d_%H%M%S)
-            backup_file="vaultwarden_backup_${timestamp}.tar.gz"
+            backup_file="aionui_backup_${timestamp}.tar.gz"
 
             # 备份整个data目录
             cd /
@@ -92,7 +92,7 @@ options = {
     'webdav_password': '$WEBDAV_PASSWORD'
 }
 client = Client(options)
-backups = [file for file in client.list() if file.endswith('.tar.gz') and file.startswith('vaultwarden_backup_')]
+backups = [file for file in client.list() if file.endswith('.tar.gz') and file.startswith('aionui_backup_')]
 backups.sort()
 if len(backups) > 5:
     to_delete = len(backups) - 5
@@ -108,7 +108,7 @@ else:
             echo "/${backup_file} directory does not exist, waiting for next sync..."
         fi
 
-        SYNC_INTERVAL=${SYNC_INTERVAL:-86400}
+        SYNC_INTERVAL=${SYNC_INTERVAL:-7200}
         echo "Next sync in ${SYNC_INTERVAL} seconds..."
         sleep $SYNC_INTERVAL
     done
