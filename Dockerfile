@@ -1,0 +1,52 @@
+FROM ubuntu:22.04
+
+# 设置环境变量避免交互式提示
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Shanghai
+
+# 安装基础依赖
+RUN apt-get update && apt-get install -y \
+    wget \
+    curl \
+    nginx \
+    supervisor \
+    tzdata \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone \
+    && rm -rf /var/lib/apt/lists/*
+
+# 下载并安装 AionUi
+RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.5.0/AionUi-1.5.0-linux-amd64.deb -O /tmp/aionui.deb \
+    && apt-get update \
+    && apt-get install -y /tmp/aionui.deb \
+    && rm /tmp/aionui.deb \
+    && rm -rf /var/lib/apt/lists/*
+
+# 下载并安装 code-server
+RUN wget https://github.com/coder/code-server/releases/download/v4.105.1/code-server_4.105.1_amd64.deb -O /tmp/code-server.deb \
+    && apt-get update \
+    && apt-get install -y /tmp/code-server.deb \
+    && rm /tmp/code-server.deb \
+    && rm -rf /var/lib/apt/lists/*
+
+# 复制 nginx 配置
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# 复制 supervisor 配置
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# 复制启动脚本
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# 暴露端口
+EXPOSE 80 25808 8080
+
+# 创建数据目录
+RUN mkdir -p /data/aionui /data/code-server
+
+# 设置工作目录
+WORKDIR /data
+
+# 使用 supervisor 启动所有服务
+ENTRYPOINT ["/entrypoint.sh"]
