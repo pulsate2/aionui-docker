@@ -85,7 +85,7 @@ RUN chmod +x /entrypoint.sh
 EXPOSE 80 25808 8080
 
 # 创建数据目录
-RUN mkdir -p /data/aionui /data/code-server
+RUN mkdir -p /data/aionui /data/code-server /data/projects
 
 # 设置工作目录
 WORKDIR /data
