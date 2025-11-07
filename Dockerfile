@@ -58,7 +58,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # 下载并安装 AionUi
-RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.4.2/AionUi-1.4.2-linux-amd64.deb -O /tmp/aionui.deb \
+RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.5.0/AionUi-1.5.0-linux-amd64.deb -O /tmp/aionui.deb \
     && apt-get update \
     && apt-get install -y /tmp/aionui.deb \
     && rm /tmp/aionui.deb \
