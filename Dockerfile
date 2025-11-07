@@ -4,15 +4,44 @@ FROM ubuntu:25.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai
 
-# 安装基础依赖
+# 安装基础依赖和常用开发工具
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
     nginx \
     supervisor \
     tzdata \
+    git \
+    python3 \
+    python3-pip \
+    python3-venv \
+    nodejs \
+    npm \
+    vim \
+    nano \
+    build-essential \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
-    && echo $TZ > /etc/timezone 
+    && echo $TZ > /etc/timezone
+
+# 安装常用 Python 包
+RUN pip3 install --no-cache-dir --break-system-packages \
+    requests \
+    numpy \
+    pandas \
+    flask \
+    fastapi \
+    uvicorn \
+    sqlalchemy \
+    pymongo \
+    redis \
+    celery \
+    pytest \
+    jupyter \
+    matplotlib \
+    pillow \
+    beautifulsoup4 \
+    selenium \
+    scrapy
 	
 # This command is updated for modern Ubuntu/Debian distributions
 RUN apt-get update \
