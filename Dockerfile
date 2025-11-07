@@ -106,6 +106,8 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # 复制启动脚本
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+COPY sync_data.sh /sync_data.sh
+RUN chmod +x /sync_data.sh
 
 # 暴露端口
 EXPOSE 80 25808 8080
