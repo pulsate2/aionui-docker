@@ -10,12 +10,11 @@ RUN apt-get update && apt-get install -y \
     curl \
     nginx \
     supervisor \
-    tzdata \
+    tzdata libasound2 \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone \
     && rm -rf /var/lib/apt/lists/*
 
-run apt-get install -y install libasound2
 
 # 下载并安装 AionUi
 RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.5.0/AionUi-1.5.0-linux-amd64.deb -O /tmp/aionui.deb \
