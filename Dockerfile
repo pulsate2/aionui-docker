@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     nginx \
     supervisor \
-    tzdata libasound2 \
+    tzdata libgbm \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone \
     && rm -rf /var/lib/apt/lists/*
