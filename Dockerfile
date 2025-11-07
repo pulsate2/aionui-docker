@@ -5,8 +5,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai
 
 # 安装基础依赖和常用开发工具
-RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel
-
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
@@ -24,6 +22,9 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
+
+RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel
+
 
 # 安装常用 Python 包
 RUN pip3 install --no-cache-dir --break-system-packages \
