@@ -26,22 +26,12 @@ RUN apt-get update && apt-get install -y \
 # 安装常用 Python 包
 RUN pip3 install --no-cache-dir --break-system-packages \
     requests \
-    numpy \
-    pandas \
     flask \
     fastapi \
     uvicorn \
-    sqlalchemy \
-    pymongo \
     redis \
-    celery \
-    pytest \
-    jupyter \
-    matplotlib \
     pillow \
-    beautifulsoup4 \
-    selenium \
-    scrapy
+    beautifulsoup4
 	
 # This command is updated for modern Ubuntu/Debian distributions
 RUN apt-get update \
