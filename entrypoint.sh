@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-./sync_data.sh &
+/sync_data.sh &
 if [ "$DOWNLOAD_BACKUP" = "true" ]; then
 	sleep 15
 fi
