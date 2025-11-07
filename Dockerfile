@@ -14,11 +14,13 @@ RUN apt-get update && apt-get install -y \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone 
 	
+# This command is updated for modern Ubuntu/Debian distributions
 RUN apt-get update \
     && apt-get install -y \
     ca-certificates \
     fonts-liberation \
-    libasound2 \
+    libasound2t64 \
+    #   ^--- THIS IS THE FIX ---^
     libatk-bridge2.0-0 \
     libatk1.0-0 \
     libcairo2 \
@@ -27,7 +29,6 @@ RUN apt-get update \
     libexpat1 \
     libfontconfig1 \
     libgbm1 \
-    #   ^----- 就是这个！
     libgcc1 \
     libgdk-pixbuf2.0-0 \
     libglib2.0-0 \
