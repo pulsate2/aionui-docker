@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:25.04
 
 # 设置环境变量避免交互式提示
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone \
     && rm -rf /var/lib/apt/lists/*
+
+apt-get install -y install libasound2t64
 
 # 下载并安装 AionUi
 RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.5.0/AionUi-1.5.0-linux-amd64.deb -O /tmp/aionui.deb \
