@@ -21,11 +21,10 @@ RUN apt-get update && apt-get install -y \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
-# 安装 Node.js LTS (使用 NodeSource 仓库获取最新版本)
+# 安装 Node.js LTS (使用 NodeSource 仓库获取最新版本，已包含 npm 和 npx)
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
     && apt-get install -y nodejs \
-    && npm install -g npm@latest \
-    && npm install -g npx
+    && npm install -g npm@latest
 
 RUN pip install --no-cache-dir --upgrade setuptools wheel --break-system-packages
 
