@@ -15,13 +15,17 @@ RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-venv \
-    nodejs \
-    npm \
     vim \
     nano \
     build-essential \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
+
+# 安装 Node.js LTS (使用 NodeSource 仓库获取最新版本)
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest \
+    && npm install -g npx
 
 RUN pip install --no-cache-dir --upgrade setuptools wheel --break-system-packages
 
@@ -32,6 +36,10 @@ RUN pip3 install --no-cache-dir --break-system-packages \
     redis \
     pillow \
     beautifulsoup4 webdavclient3
+
+# 安装 uv (包含 uvx) - 现代 Python 包管理器
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /root/.bashrc
 	
 # This command is updated for modern Ubuntu/Debian distributions
 RUN apt-get update \
