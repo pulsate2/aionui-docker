@@ -3,7 +3,7 @@ set -e
 
 /sync_data.sh &
 if [ "$DOWNLOAD_BACKUP" = "true" ]; then
-	sleep 15
+	sleep 60
 fi
 
 # 创建日志目录
