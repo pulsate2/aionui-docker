@@ -65,7 +65,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
     && rm -rf /var/lib/apt/lists/*
 
 # 安装 Python 依赖
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel --break-system-packages
+RUN pip install --no-cache-dir --upgrade setuptools wheel --break-system-packages
 RUN pip3 install --no-cache-dir --break-system-packages \
     requests \
     flask \
