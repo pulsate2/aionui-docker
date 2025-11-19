@@ -1,10 +1,9 @@
 FROM ubuntu:25.04
-
 # 设置环境变量避免交互式提示
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai
 
-# 安装基础依赖和常用开发工具
+# 安装基础依赖和常用开发工具 (合并 RUN 以优化)
 RUN apt-get update && apt-get install -y \
     wget \
     curl \
@@ -18,35 +17,9 @@ RUN apt-get update && apt-get install -y \
     vim \
     nano \
     build-essential \
-    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
-    && echo $TZ > /etc/timezone
-
-# 安装 Node.js LTS (使用 NodeSource 仓库获取最新版本，已包含 npm 和 npx)
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install -g npm@latest
-
-RUN pip install --no-cache-dir --upgrade setuptools wheel --break-system-packages
-
-# 安装常用 Python 包
-RUN pip3 install --no-cache-dir --break-system-packages \
-    requests \
-    flask \
-    redis \
-    pillow \
-    beautifulsoup4 webdavclient3
-
-# 安装 uv (包含 uvx) - 现代 Python 包管理器
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
-    && echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /root/.bashrc
-	
-# This command is updated for modern Ubuntu/Debian distributions
-RUN apt-get update \
-    && apt-get install -y \
     ca-certificates \
     fonts-liberation \
     libasound2t64 \
-    #   ^--- THIS IS THE FIX ---^
     libatk-bridge2.0-0 \
     libatk1.0-0 \
     libcairo2 \
@@ -78,43 +51,58 @@ RUN apt-get update \
     libxss1 \
     libxtst6 \
     lsb-release \
-    wget \
     xdg-utils \
     --no-install-recommends \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+    && echo $TZ > /etc/timezone \
     && rm -rf /var/lib/apt/lists/*
 
-# 下载并安装 AionUi
-RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.5.0/AionUi-1.5.0-linux-amd64.deb -O /tmp/aionui.deb \
+# 安装 Node.js LTS
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
     && apt-get update \
-    && apt-get install -y /tmp/aionui.deb \
-    && rm /tmp/aionui.deb \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest \
     && rm -rf /var/lib/apt/lists/*
 
-# 下载并安装 code-server
-RUN wget https://github.com/coder/code-server/releases/download/v4.105.1/code-server_4.105.1_amd64.deb -O /tmp/code-server.deb \
-    && apt-get update \
-    && apt-get install -y /tmp/code-server.deb \
-    && rm /tmp/code-server.deb \
-    && rm -rf /var/lib/apt/lists/*
+# 安装 Python 依赖
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel --break-system-packages
+RUN pip3 install --no-cache-dir --break-system-packages \
+    requests \
+    flask \
+    redis \
+    pillow \
+    beautifulsoup4 \
+    webdavclient3
 
-# 下载并安装 cloudflared
-RUN wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -O /tmp/cloudflared.deb \
-    && apt-get update \
-    && apt-get install -y /tmp/cloudflared.deb \
-    && rm /tmp/cloudflared.deb \
-    && rm -rf /var/lib/apt/lists/*
+# 安装 uv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /root/.bashrc
 
-# 复制 nginx 配置
+# 下载并安装 .deb 包 (合并下载和安装)
+RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.5.0/AionUi-1.5.0-linux-amd64.deb -O /tmp/aionui.deb && \
+    wget https://github.com/coder/code-server/releases/download/v4.105.1/code-server_4.105.1_amd64.deb -O /tmp/code-server.deb && \
+    wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -O /tmp/cloudflared.deb && \
+    apt-get update && \
+    apt-get install -y /tmp/*.deb && \
+    rm /tmp/*.deb && \
+    rm -rf /var/lib/apt/lists/*
+
+# 复制配置文件和脚本
 COPY nginx.conf /etc/nginx/nginx.conf
-
-# 复制 supervisor 配置
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# 复制启动脚本
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 COPY sync_data.sh /sync_data.sh
-RUN chmod +x /sync_data.sh
+
+# ---- 新增部分开始 ----
+# 复制你的默认 HTML 页面到 Nginx 的网站根目录
+COPY index.html /var/www/html/index.html
+
+# 确保 Nginx 用户 (www-data) 有权限读取网站文件
+RUN chown -R www-data:www-data /var/www/html
+# ---- 新增部分结束 ----
+
+# 赋予脚本执行权限
+RUN chmod +x /entrypoint.sh /sync_data.sh
 
 # 暴露端口
 EXPOSE 80 25808 8080
