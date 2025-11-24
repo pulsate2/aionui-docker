@@ -60,7 +60,7 @@ RUN apt-get update && apt-get install -y \
 # 添加 Nginx 官方仓库并安装最新版本
 RUN curl -fsSL https://nginx.org/keys/nginx_signing.key | gpg --dearmor -o /usr/share/keyrings/nginx-archive-keyring.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu/ $(lsb_release -cs) nginx" > /etc/apt/sources.list.d/nginx.list \
-    && echo -e "Package: *\nPin: origin nginx.org\nPin-Priority: 900\n" > /etc/apt/preferences.d/99nginx \
+    && printf "Package: *\nPin: origin nginx.org\nPin-Priority: 900\n" > /etc/apt/preferences.d/99nginx \
     && apt-get update \
     && apt-get install -y nginx \
     && rm -rf /var/lib/apt/lists/*
