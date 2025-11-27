@@ -87,7 +87,7 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
     && echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /root/.bashrc
 
 # 下载并安装 .deb 包 (合并下载和安装)
-RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.5.5/AionUi-1.5.5-linux-amd64.deb -O /tmp/aionui.deb && \
+RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.6.0/AionUi-1.6.0-linux-amd64.deb -O /tmp/aionui.deb && \
     wget https://github.com/coder/code-server/releases/download/v4.105.1/code-server_4.105.1_amd64.deb -O /tmp/code-server.deb && \
     wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -O /tmp/cloudflared.deb && \
     apt-get update && \
@@ -122,4 +122,5 @@ RUN mkdir -p /data/aionui /data/code-server /data/projects
 WORKDIR /data
 
 # 使用 supervisor 启动所有服务
+
 ENTRYPOINT ["/entrypoint.sh"]
