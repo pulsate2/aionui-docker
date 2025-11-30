@@ -72,7 +72,7 @@ sync_data() {
 
             # 备份整个data目录
             cd /
-            tar -czf "/${backup_file}" data
+            tar -czf "/${backup_file}" --exclude='node_modules' data
 
             # 上传新备份到WebDAV
             curl -u "$WEBDAV_USERNAME:$WEBDAV_PASSWORD" -T "/${backup_file}" "$FULL_WEBDAV_URL/${backup_file}"
