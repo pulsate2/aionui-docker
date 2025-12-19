@@ -69,8 +69,12 @@ RUN curl -fsSL https://nginx.org/keys/nginx_signing.key | gpg --dearmor -o /usr/
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
     && apt-get update \
     && apt-get install -y nodejs \
-    && npm install -g npm@latest \
+    && npm install -g npm@latest  \
     && rm -rf /var/lib/apt/lists/*
+
+run npm install -g @anthropic-ai/claude-code
+run npm install -g pnpm
+
 
 # 安装 Python 依赖
 RUN pip install --no-cache-dir --upgrade setuptools wheel --break-system-packages
@@ -87,7 +91,7 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
     && echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /root/.bashrc
 
 # 下载并安装 .deb 包 (合并下载和安装)
-RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.6.0/AionUi-1.6.0-linux-amd64.deb -O /tmp/aionui.deb && \
+RUN wget https://github.com/iOfficeAI/AionUi/releases/download/v1.6.5/AionUi-1.6.5-linux-amd64.deb -O /tmp/aionui.deb && \
     wget https://github.com/coder/code-server/releases/download/v4.105.1/code-server_4.105.1_amd64.deb -O /tmp/code-server.deb && \
     wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -O /tmp/cloudflared.deb && \
     apt-get update && \
@@ -124,3 +128,4 @@ WORKDIR /data
 # 使用 supervisor 启动所有服务
 
 ENTRYPOINT ["/entrypoint.sh"]
+
