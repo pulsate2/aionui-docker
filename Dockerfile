@@ -52,6 +52,7 @@ RUN apt-get update && apt-get install -y \
     libxss1 \
     libxtst6 \
     xdg-utils \
+    net-tools \
     --no-install-recommends \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone \
@@ -72,7 +73,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
     && npm install -g npm@latest  \
     && rm -rf /var/lib/apt/lists/*
 
-run npm install -g @anthropic-ai/claude-code
+run npm install -g @anthropic-ai/claude-code @twsxtd/hapi
 run npm install -g pnpm
 
 
@@ -127,4 +128,5 @@ WORKDIR /data
 # 使用 supervisor 启动所有服务
 
 ENTRYPOINT ["/entrypoint.sh"]
+
 
