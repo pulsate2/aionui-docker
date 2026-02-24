@@ -78,7 +78,7 @@ run npm install -g pnpm
 
 
 # 安装 Python 依赖
-RUN pip install --no-cache-dir --upgrade setuptools wheel --break-system-packages
+RUN pip install --no-cache-dir --upgrade --ignore-installed setuptools wheel --break-system-packages
 RUN pip3 install --no-cache-dir --break-system-packages \
     requests \
     flask \
@@ -128,5 +128,6 @@ WORKDIR /data
 # 使用 supervisor 启动所有服务
 
 ENTRYPOINT ["/entrypoint.sh"]
+
 
 
