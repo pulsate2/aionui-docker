@@ -39,13 +39,13 @@ latest_backup = sorted(backups)[-1]
 print(f'最新备份文件：{latest_backup}')
 with requests.get(f'$FULL_WEBDAV_URL/{latest_backup}', auth=('$WEBDAV_USERNAME', '$WEBDAV_PASSWORD'), stream=True) as r:
     if r.status_code == 200:
-        with open(f'/{latest_backup}', 'wb') as f:
+        with open(f'/tmp/{latest_backup}', 'wb') as f:
             for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)
         print(f'成功下载备份文件到 /{latest_backup}')
-        if os.path.exists(f'/{latest_backup}'):
+        if os.path.exists(f'/tmp/{latest_backup}'):
             # 解压备份文件
-            with tarfile.open(f'/{latest_backup}', 'r:gz') as tar:
+            with tarfile.open(f'/tmp/{latest_backup}', 'r:gz') as tar:
                 tar.extractall('/')
                 print(f'成功从 {latest_backup} 恢复备份')
         else:
@@ -72,10 +72,10 @@ sync_data() {
 
             # 备份整个data目录
             cd /
-            tar -czf "/${backup_file}" --exclude='node_modules' --exclude='pnpm' --exclude='.hapi'  --exclude='.cache' --exclude='.next'  data
+            tar -czf "/tmp/${backup_file}" --exclude='node_modules' --exclude='pnpm' --exclude='.hapi'  --exclude='.cache'  --exclude='.next' --exclude='.npm'  data
 
             # 上传新备份到WebDAV
-            curl -u "$WEBDAV_USERNAME:$WEBDAV_PASSWORD" -T "/${backup_file}" "$FULL_WEBDAV_URL/${backup_file}"
+            curl -u "$WEBDAV_USERNAME:$WEBDAV_PASSWORD" -T "/tmp/${backup_file}" "$FULL_WEBDAV_URL/${backup_file}"
             if [ $? -eq 0 ]; then
                 echo "Successfully uploaded ${backup_file} to WebDAV"
             else
@@ -103,9 +103,9 @@ else:
     print('Only {} backups found, no need to clean.'.format(len(backups)))
 " 2>&1
 
-            rm -f "/${backup_file}"
+            rm -f "/tmp/${backup_file}"
         else
-            echo "/${backup_file} directory does not exist, waiting for next sync..."
+            echo "/tmp/${backup_file} directory does not exist, waiting for next sync..."
         fi
 
         SYNC_INTERVAL=${SYNC_INTERVAL:-7200}
