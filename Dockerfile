@@ -91,6 +91,12 @@ RUN pip3 install --no-cache-dir --break-system-packages \
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
     && echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /root/.bashrc
 
+# 安装 Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
+    && . "$HOME/.cargo/env" \
+    && rustup default stable \
+    && rustup component add rustfmt clippy
+
 # 下载并安装 .deb 包 (合并下载和安装)
 RUN wget https://github.com/coder/code-server/releases/download/v4.105.1/code-server_4.105.1_amd64.deb -O /tmp/code-server.deb && \
     wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -O /tmp/cloudflared.deb && \
