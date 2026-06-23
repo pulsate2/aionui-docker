@@ -19,8 +19,6 @@ sleep 5
 
 # 根据环境变量按需启动 code-server
 
-supervisorctl start code-server
-
 
 # 根据环境变量按需启动 cloudflared
 if [ -n "$CF_TOKEN" ]; then
