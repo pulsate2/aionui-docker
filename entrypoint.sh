@@ -18,12 +18,9 @@ echo "Waiting for supervisor to initialize..."
 sleep 5
 
 # 根据环境变量按需启动 code-server
-if [ -n "$ENABLE_CODESERVER" ]; then
-    echo "ENABLE_CODESERVER is set, starting code-server..."
-    supervisorctl start code-server
-else
-    echo "ENABLE_CODESERVER not set, code-server will not start"
-fi
+
+supervisorctl start code-server
+
 
 # 根据环境变量按需启动 cloudflared
 if [ -n "$CF_TOKEN" ]; then
