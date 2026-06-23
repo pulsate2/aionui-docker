@@ -73,7 +73,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
     && npm install -g npm@latest  \
     && rm -rf /var/lib/apt/lists/*
 
-run npm install -g @anthropic-ai/claude-code @twsxtd/hapi
+run npm install -g @anthropic-ai/claude-code @twsxtd/hapi @openai/codex
 run npm install -g pnpm
 
 
