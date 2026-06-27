@@ -98,7 +98,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
     && rustup component add rustfmt clippy
 
 # 下载并安装 .deb 包 (合并下载和安装)
-RUN wget https://github.com/coder/code-server/releases/download/v4.125.0/code-server_4.125.0_amd64.deb -O /tmp/code-server.deb && \
+RUN wget https://github.com/coder/code-server/releases/download/v4.112.0/code-server_4.112.0_amd64.deb -O /tmp/code-server.deb && \
     wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -O /tmp/cloudflared.deb && \
     apt-get update && \
     apt-get install -y /tmp/*.deb && \
